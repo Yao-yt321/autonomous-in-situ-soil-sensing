@@ -1,9 +1,9 @@
-# Autonomous In Situ Soil Sensing — Research Code
+# Autonomous in situ soil sensing — research code
 
 Reference implementations of the two core control methods described in the manuscript **“Autonomous in situ soil sensing with location and penetration depth control”**:
 
-- **DCA-MPC** for path tracking and stopping at target detection points;
-- **adaptive probe penetration** for touchdown detection, joint-torque-based axial-force estimation, force-feedback feed-speed regulation, and depth/force-constrained termination.
+- **DCA-MPC** for autonomous path tracking and stopping at target detection points;
+- **adaptive probe penetration** for touchdown detection, axial force estimation from joint torques, force feedback regulation of probe feed speed, and termination under depth and force constraints.
 
 The code is written for C++11 and is organized as two independent research modules.
 
