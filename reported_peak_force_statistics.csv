@@ -1,4 +1,0 @@
-strategy,median_peak_force_n,iqr_peak_force_n,points_at_or_above_fmax,percentage_at_or_above_fmax,fmax_n
-adaptive,51.38,7.7,0,0,66.7
-constant_0_10_mps,52.97,12.6,11,22,66.7
-constant_0_30_mps,58.34,15.18,16,32,66.7
