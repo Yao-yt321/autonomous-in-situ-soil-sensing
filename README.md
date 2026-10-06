@@ -1,91 +1,84 @@
-# Autonomous in situ soil sensing — research code
+# Processed field data
 
-Reference implementations of the two core control methods described in the manuscript **“Autonomous in situ soil sensing with location and penetration depth control”**:
+This directory contains processed field data associated with the two control methods released in this repository:
 
-- **DCA-MPC** for autonomous path tracking and stopping at target detection points;
-- **adaptive probe penetration** for touchdown detection, axial force estimation from joint torques, force feedback regulation of probe feed speed, and termination under depth and force constraints.
+1. DCA-MPC for path tracking and stopping at target detection points.
+2. Adaptive probe penetration using axial force feedback estimated from robotic-arm joint torques.
 
-The code is written for C++11 and is organized as two independent research modules.
+The data are provided as compact CSV files corresponding to quantitative results reported in the manuscript
+“Autonomous in situ soil sensing with location and penetration depth control”.
 
-## Repository structure
+## Data source and collection
 
-```text
-.
-├── DCA_MPC/
-│   ├── include/dca_mpc/
-│   ├── src/
-│   ├── examples/
-│   ├── tests/
-│   └── docs/
-├── adaptive_penetration/
-│   ├── include/adaptive_penetration/
-│   ├── src/
-│   ├── calibration/
-│   ├── examples/
-│   ├── tests/
-│   └── docs/
-├── CMakeLists.txt
-└── README.md
-```
+Field trials were conducted in May 2026 at Chunhui Family Farm in Gong'an County, Jingzhou, Hubei Province, China.
+The field was managed under a rice-rapeseed rotation system.
 
-## Build
+For navigation experiments, 50 target detection points and six continuous paths totaling 798.9 m were used.
+PP, Stanley, MPC, and DCA-MPC were evaluated on the same reference paths. Each controller completed three
+independent full-route trials, and robot pose was recorded at 10 Hz.
 
-```bash
-mkdir -p build
-cd build
-cmake ..
-cmake --build . -j4
-```
+For penetration experiments, all trials used DCA-MPC for path tracking and stopping. Three probe-feed strategies
+were evaluated: adaptive force-feedback control, constant 0.10 m/s, and constant 0.30 m/s. One complete 50-point
+field trial was conducted for each penetration strategy.
 
-## Run the test suite
+## Files
 
-```bash
-ctest --output-on-failure
-```
+### navigation/path_tracking_summary.csv
+Processed navigation-performance summary corresponding to Table 3 of the manuscript.
 
-The test suite covers DCA-MPC scheduling, vehicle-model linearization, MPC constraints, path-curvature handling, closed-loop numerical scenarios, adaptive penetration state transitions, axial-force estimation, termination priority, a complete adaptive-penetration control-cycle verification, and the offline calibration workflow.
+Columns report:
+- controller;
+- mean maximum absolute lateral offset;
+- lateral RMSE mean and SD;
+- mean maximum absolute heading offset;
+- heading RMSE mean and SD;
+- mean maximum stopping offset.
 
-## DCA-MPC examples
+Straight and curved path segments are reported separately. Curved segments include gentle and sharp curves.
 
-From the root build directory:
+### navigation/dca_mpc_stopping_offsets.csv
+Pointwise mean stopping offsets for DCA-MPC at the 50 target detection points, averaged over three field trials.
 
-```bash
-./DCA_MPC/dca_mpc_one_step
-./DCA_MPC/dca_mpc_closed_loop
-./DCA_MPC/dca_mpc_scenario_sweep
-./DCA_MPC/dca_mpc_benchmark
-```
+These values give a range of 2.11–5.22 cm and an overall mean of 4.04 cm, as reported for Fig. 13.
 
-See [`DCA_MPC/README.md`](DCA_MPC/README.md) for module details.
+### penetration/penetration_depths.csv
+Terminal penetration depths at 50 target detection points for:
+- adaptive force-feedback feed speed;
+- constant feed speed of 0.10 m/s;
+- constant feed speed of 0.30 m/s.
 
-## Adaptive penetration examples
+The target penetration depth was 10.0 cm and the maximum allowable penetration depth was 10.5 cm.
+The data reproduce the terminal-depth results reported for Fig. 14:
+- adaptive: MAE 0.207 cm, SD 0.124 cm;
+- 0.10 m/s: MAE 0.332 cm, SD 0.439 cm;
+- 0.30 m/s: MAE 0.537 cm, SD 0.663 cm.
 
-```bash
-./adaptive_penetration/adaptive_penetration_one_step
-./adaptive_penetration/adaptive_penetration_cycle_example
-```
+### penetration/representative_force_responses.csv
+Representative estimated axial-force responses corresponding to Fig. 15a.
 
-The calibration utility can be run from the repository root:
+Representative points:
+- hard soil: detection point 35, penetration resistance 3.47 MPa;
+- moderately compacted soil: detection point 10, penetration resistance 1.53 MPa;
+- soft soil: detection point 23, penetration resistance 0.84 MPa.
 
-```bash
-python3 adaptive_penetration/calibration/fit_force_estimator.py \
-  adaptive_penetration/calibration/calibration_verification_data.csv \
-  --output-dir build/calibration_demo
-```
+Each point includes adaptive, 0.10 m/s, and 0.30 m/s strategies.
+The touchdown threshold was 5.0 N and the axial-force safety threshold was 66.7 N.
 
-See [`adaptive_penetration/README.md`](adaptive_penetration/README.md) for module details.
+### penetration/reported_peak_force_statistics.csv
+Compact statistics for the peak-force distributions reported for Fig. 15b.
 
-## Dependencies
+The file contains the reported median, interquartile range, and the number and percentage of target points
+reaching or exceeding the 66.7 N load limit for each penetration strategy.
 
-- CMake 3.10 or later
-- a C++11 compiler
-- Python 3 for the calibration utility
+## Units
 
-The core research modules use only the C++ standard library. The calibration utility uses only the Python standard library.
+- lateral and stopping offsets: cm
+- heading offsets: degrees
+- penetration depth: cm
+- time: s
+- axial force: N
+- penetration resistance: MPa
 
-## Manuscript mapping
+## Accessibility
 
-Equation- and section-level code maps are provided in:
-
-- [`DCA_MPC/docs/PAPER_CODE_MAP.md`](DCA_MPC/docs/PAPER_CODE_MAP.md)
-- [`adaptive_penetration/docs/PAPER_CODE_MAP.md`](adaptive_penetration/docs/PAPER_CODE_MAP.md)
+All released datasets are UTF-8 CSV files and can be read directly in MATLAB, Python, R, and spreadsheet software.
