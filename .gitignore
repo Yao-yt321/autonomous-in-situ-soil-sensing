@@ -1,0 +1,32 @@
+# CMake build outputs
+build/
+build-*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+CTestTestfile.cmake
+cmake_install.cmake
+compile_commands.json
+Testing/
+
+# Generated binaries and libraries
+*.o
+*.a
+*.so
+*.out
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Generated analysis output
+calibration_output/
+calibration_demo/
+closed_loop_trace.csv
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*~
