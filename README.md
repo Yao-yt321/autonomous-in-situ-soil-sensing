@@ -7,10 +7,20 @@ Reference implementations of the two core control methods described in the manus
 
 The code is written for C++11 and is organized as two independent research modules.
 
+## Related manuscript
+
+This repository accompanies the manuscript:
+
+**Autonomous in situ soil sensing with location and penetration depth control**
+
+The repository provides reference implementations of the main control methods and processed datasets supporting the corresponding quantitative results reported in the manuscript.
+
 ## Repository structure
 
 ```text
 .
+├── .github/
+│   └── workflows/
 ├── DCA_MPC/
 │   ├── include/dca_mpc/
 │   ├── src/
@@ -24,6 +34,16 @@ The code is written for C++11 and is organized as two independent research modul
 │   ├── examples/
 │   ├── tests/
 │   └── docs/
+├── data/
+│   ├── navigation/
+│   │   ├── dca_mpc_stopping_offsets.csv
+│   │   └── path_tracking_summary.csv
+│   ├── penetration/
+│   │   ├── penetration_depths.csv
+│   │   ├── reported_peak_force_statistics.csv
+│   │   └── representative_force_responses.csv
+│   └── README.md
+├── .gitignore
 ├── CMakeLists.txt
 └── README.md
 ```
@@ -74,6 +94,13 @@ python3 adaptive_penetration/calibration/fit_force_estimator.py \
 ```
 
 See [`adaptive_penetration/README.md`](adaptive_penetration/README.md) for module details.
+
+## Data
+
+Processed datasets supporting the quantitative results reported in the manuscript are provided in the data/ directory:
+- data/navigation/ contains the path-tracking and target-point stopping results used to evaluate DCA-MPC;
+- data/penetration/ contains the penetration-depth and estimated axial-force data used to evaluate the adaptive probe penetration method.
+Descriptions of the data fields, data sources, collection procedures, and their correspondence to the analyses reported in the manuscript are provided in [`data/README.md`](data/README.md).
 
 ## Dependencies
 
